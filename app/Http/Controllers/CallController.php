@@ -32,23 +32,23 @@ class CallController extends Controller
         if($request->type == 'android'){
             sendFCMNotificationPanel('Hello', null, $token, $data);
         }else{
-            $this->sendVoip(null,null,'default',$data,$token,null,null);
+            $bundleId = 'OtherMindEPTEST123';
+            $this->sendVoip(null,null,'default',$data,$token,null,$bundleId);
         }
         return $response = (new apiresponse())->customResponse(
             'call created successfully',
              200,
             (object)[]);
-
     }
     public function sendVoip($title, $body, $sound, $data, $token, $name, $bundleId)
     {
         try {
             $expiryInSeconds = 30;
             $options = [
-                'key_id' => 'Y2U7L4XL5Y',
-                'team_id' => '5MVY25HYQD',
+                'key_id' => '433QPZ6K3F',
+                'team_id' => '9K6DZGH9P6',
                 'app_bundle_id' => $bundleId,
-                'private_key_path' => public_path('/certificate') . '/AuthKey_Y2U7L4XL5Y.p8', // Path to private key
+                'private_key_path' => public_path('/certificate') . '/AuthKey_433QPZ6K3F.p8', // Path to private key
                 'private_key_secret' => null // Private key secret
             ];
 
