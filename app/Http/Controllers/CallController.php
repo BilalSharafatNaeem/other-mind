@@ -14,31 +14,41 @@ use Pushok\Payload\Alert;
 class CallController extends Controller
 {
     public function createCall(Request $request){
-        $token = $request->fcm_token;
-        $validator = Validator::make($request->all(), [
-            'fcm_token' => 'required',
-            'type' => 'required|in:android,ios',
-        ]);
-        if ($validator->fails()) {
-            DB::rollback();
-            return $response = (new apiresponse())->customResponse('Fields required.',
-                422,
-                $validator->errors()->toArray());
+        try{
+            $token = $request->fcm_token;
+            $validator = Validator::make($request->all(), [
+                'fcm_token' => 'required',
+                'type' => 'required|in:android,ios',
+            ]);
+            if ($validator->fails()) {
+                DB::rollback();
+                return $response = (new apiresponse())->customResponse('Fields required.',
+                    422,
+                    $validator->errors()->toArray());
+            }
+            $data = (object)array(
+                'fcm_token' => $request->fcm_token,
+                'type' => $request->type,
+            );
+            if($request->type == 'android'){
+                sendFCMNotificationPanel('Hello', null, $token, $data);
+            }else{
+                $bundleId = 'OtherMindEPTEST123';
+                $this->sendVoip('testing','','call_tone.mp3',$data,$token,'',$bundleId);
+            }
+            return $response = (new apiresponse())->customResponse(
+                'call created successfully',
+                200,
+                (object)[]);
+        }catch (\Exception $ex) {
+            return $response = (new apiresponse())->customResponse(
+                'Something went wrong. Please try again.',
+                500,
+                $ex->getMessage()
+            );
         }
-        $data = (object)array(
-            'fcm_token' => $request->fcm_token,
-            'type' => $request->type,
-        );
-        if($request->type == 'android'){
-            sendFCMNotificationPanel('Hello', null, $token, $data);
-        }else{
-            $bundleId = 'OtherMindEPTEST123';
-            $this->sendVoip(null,null,'default',$data,$token,null,$bundleId);
-        }
-        return $response = (new apiresponse())->customResponse(
-            'call created successfully',
-             200,
-            (object)[]);
+
+
     }
     public function sendVoip($title, $body, $sound, $data, $token, $name, $bundleId)
     {
