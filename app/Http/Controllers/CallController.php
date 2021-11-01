@@ -81,7 +81,7 @@ class CallController extends Controller
             }
 
 
-            $client = new Client($authProvider, $production = true);
+            $client = new Client($authProvider, $production = false);
             $client->addNotifications($notifications);
             $responses = $client->push();
 
