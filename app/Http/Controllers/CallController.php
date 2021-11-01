@@ -58,11 +58,10 @@ class CallController extends Controller
             $options = [
                 'key_id' => '433QPZ6K3F',
                 'team_id' => '9K6DZGH9P6',
-                'app_bundle_id' => $bundleId,
+                'app_bundle_id' => 'OtherMindEPTEST123',
                 'private_key_path' => public_path('/certificate') . '/AuthKey_433QPZ6K3F.p8', // Path to private key
                 'private_key_secret' => null // Private key secret
             ];
-
 
             $authProvider = AuthProvider\Token::create($options);
             $alert = Alert::create()->setTitle($title);
