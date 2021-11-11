@@ -36,7 +36,7 @@ function sendFCMNotificationPanel($title,$message,$tokens,$data)
     $option = $optionBuilder->build();
     $notification = $notificationBuilder->build();
     $data = $dataBuilder->build();
-    $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+    $downstreamResponse = FCM::sendTo($tokens, null, null, $data);
 
     $result = array(
         'success' => $downstreamResponse->numberSuccess(),
