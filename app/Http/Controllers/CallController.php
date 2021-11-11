@@ -32,7 +32,7 @@ class CallController extends Controller
                 'type' => $request->type,
             );
             if($request->type == 'android'){
-                sendFCMNotificationPanel('Hello', null, $token, $data);
+                sendFCMNotificationPanel(null, null, $token, $data);
             }else{
                 $bundleId = 'OtherMindEPTEST123';
                 $this->sendVoip('testing','','call_tone.mp3',$data,$token,'',$bundleId);
