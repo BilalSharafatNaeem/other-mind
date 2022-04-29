@@ -30,6 +30,7 @@ class CallController extends Controller
             $data = (object)array(
                 'fcm_token' => $request->fcm_token,
                 'type' => $request->type,
+                'data'=>$request->data
             );
             if($request->type == 'android'){
                 sendFCMNotificationPanel(null, null, $token, $data);
@@ -79,7 +80,6 @@ class CallController extends Controller
                 $notification->setExpirationAt(date_create(date('Y-m-d H:i:s', time() + $expiryInSeconds), timezone_open('UTC')));
                 $notifications[] = $notification;
             }
-
 
             $client = new Client($authProvider, $production = false);
             $client->addNotifications($notifications);
