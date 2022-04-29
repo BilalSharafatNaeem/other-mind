@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('create_call','CallController@createCall');
 Route::get('utc_current_time',function () {
-    $dateTime =['time'=>Carbon\Carbon::now()->timezone('0')->format('d-m-Y H:i:s')];
+    $dateTime =['time'=>Carbon\Carbon::now()->timezone('0')];
     return response($dateTime,200)
         ->header('Content-Type', 'application/json');
 });
