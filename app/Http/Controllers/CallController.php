@@ -41,7 +41,7 @@ class CallController extends Controller
             return $response = (new apiresponse())->customResponse(
                 'call created successfully',
                 200,
-                $data);
+                (object)[]);
         }catch (\Exception $ex) {
             return $response = (new apiresponse())->customResponse(
                 'Something went wrong. Please try again.',
