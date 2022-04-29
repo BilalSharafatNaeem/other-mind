@@ -56,10 +56,10 @@ class CallController extends Controller
         try {
             $expiryInSeconds = 30;
             $options = [
-                'key_id' => '433QPZ6K3F',
-                'team_id' => '9K6DZGH9P6',
+                'key_id' => '3RK6VXKN39',
+                'team_id' => 'V42DL773S5',
                 'app_bundle_id' => 'OtherMindEPTEST123',
-                'private_key_path' => public_path('/certificate') . '/AuthKey_433QPZ6K3F.p8', // Path to private key
+                'private_key_path' => public_path('/certificate') . '/AuthKey_3RK6VXKN39.p8', // Path to private key
                 'private_key_secret' => null // Private key secret
             ];
 
