@@ -24,3 +24,4 @@ Route::get('utc_current_time',function () {
         ->header('Content-Type', 'application/json');
 });
 Route::post('lat_long','CallController@latLong');
+Route::post('login','CallController@login');

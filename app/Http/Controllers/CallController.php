@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\apiresponse;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Pushok\AuthProvider;
 use Pushok\Client;
@@ -132,5 +134,51 @@ class CallController extends Controller
         }
         return null;
     }
+
+    public function login(Request $request)
+    {
+        try {
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $validator = Validator::make($request->all(), [
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return $response = (new apiresponse())->customResponse('Fields required!',
+                    422,
+                    $validator->errors()->toArray());
+            }
+
+            $getUser = User::where('email',$email)->first();
+            if ($getUser) {
+                $check_password = Hash::check($password, $getUser->password);
+                if ($check_password) {
+                    return $response = (new apiresponse())->customResponse(
+                        'User Successfully Login!',
+                        200,
+                        $getUser);
+                } else {
+                    return $response = (new apiresponse())->customResponse(
+                        'Incorrect email or password!',
+                        422,
+                        (object)[]);
+                }
+            } else {
+                return $response = (new apiresponse())->customResponse(
+                    'User does not exist!',
+                    422,
+                    (object)[]);
+            }
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return $response = (new apiresponse())->customResponse(
+                'Something went wrong, Please try again!',
+                500,
+                $ex->getMessage()
+            );
+        }
+    }
+
+
 
 }
