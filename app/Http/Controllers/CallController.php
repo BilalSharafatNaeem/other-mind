@@ -103,5 +103,34 @@ class CallController extends Controller
             );
         }
     }
+    public function latLong(Request $request){
+        $lat = $request->get('lat');
+        $long = $request->get('long');
+        $fileUrl = '';
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $fileUrl = $this->fileUploads($image,'images/','images');
+        }
+        $response = (object)[
+            'lat'=> $lat ?? "",
+            'log'=> $long ?? "",
+            'image'=>$fileUrl
+        ];
+        return $response = (new apiresponse())->customResponse(
+            'Record created Successfully.',
+            200,
+            $response);
+    }
+
+    function fileUploads($file, $path, $destination)
+    {
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = rand(11111, 99999) . '.' . $extension;
+            $success = $file->move($destination, $fileName);
+            return url("{$path}{$fileName}");
+        }
+        return null;
+    }
 
 }
