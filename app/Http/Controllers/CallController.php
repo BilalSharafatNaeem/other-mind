@@ -140,10 +140,10 @@ class CallController extends Controller
     public function login(Request $request)
     {
         try {
-            $email = $request->input('email');
-            $password = $request->input('password');
+            $username = $request->get('username');
+            $password = $request->get('password');
             $validator = Validator::make($request->all(), [
-                'email' => 'required',
+                'username' => 'required',
                 'password' => 'required',
             ]);
             if ($validator->fails()) {
@@ -152,7 +152,9 @@ class CallController extends Controller
                     $validator->errors()->toArray());
             }
 
-            $getUser = User::where('email',$email)->first();
+            $fieldType = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+            $getUser = User::where($fieldType,$username)->first();
             if ($getUser) {
                 $check_password = Hash::check($password, $getUser->password);
                 if ($check_password) {
@@ -162,7 +164,7 @@ class CallController extends Controller
                         $getUser);
                 } else {
                     return $response = (new apiresponse())->customResponse(
-                        'Incorrect email or password!',
+                        'Incorrect username or password!',
                         422,
                         (object)[]);
                 }
