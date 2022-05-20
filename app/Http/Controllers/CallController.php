@@ -19,9 +19,11 @@ class CallController extends Controller
     public function createCall(Request $request){
         try{
             $token = $request->fcm_token;
+            $production  = $request->production;
             $validator = Validator::make($request->all(), [
                 'fcm_token' => 'required',
                 'type' => 'required|in:android,ios',
+                'production' => 'required_if:type,ios',
             ]);
             if ($validator->fails()) {
                 DB::rollback();
@@ -37,8 +39,8 @@ class CallController extends Controller
             if($request->type == 'android'){
                 sendFCMNotificationPanel(null, null, $token, $data);
             }else{
-                $bundleId = 'OtherMindEPTEST123';
-                $this->sendVoip('testing','','call_tone.mp3',$data,$token,'',$bundleId);
+//                $bundleId = 'OtherMindEPTEST123';
+                $this->sendVoip('testing','','call_tone.mp3',$data,$token,'',$production);
             }
             return $response = (new apiresponse())->customResponse(
                 'call created successfully',
@@ -54,7 +56,7 @@ class CallController extends Controller
 
 
     }
-    public function sendVoip($title, $body, $sound, $data, $token, $name, $bundleId)
+    public function sendVoip($title, $body, $sound, $data, $token, $name,$production)
     {
         try {
             $expiryInSeconds = 30;
@@ -83,7 +85,7 @@ class CallController extends Controller
                 $notifications[] = $notification;
             }
 
-            $client = new Client($authProvider, $production = false);
+            $client = new Client($authProvider, $production);
             $client->addNotifications($notifications);
             $responses = $client->push();
 
