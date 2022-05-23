@@ -210,7 +210,7 @@ class CallController extends Controller
             if($saveRecord){
                 return $response = (new apiresponse())->customResponse(
                     'Record created successfully',
-                    422,
+                    200,
                     $saveRecord);
             }else{
                 return $response = (new apiresponse())->customResponse(
