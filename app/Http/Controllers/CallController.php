@@ -191,7 +191,7 @@ class CallController extends Controller
             $long = $request->get('long');
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
-                'phone_number' => 'required|unique:users,phone_number',
+                'phone_number' => 'required',
                 'lat' => 'required',
                 'long' => 'required',
             ]);
