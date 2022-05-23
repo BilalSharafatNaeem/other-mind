@@ -25,3 +25,4 @@ Route::get('utc_current_time',function () {
 });
 Route::post('lat_long','CallController@latLong');
 Route::post('login','CallController@login');
+Route::post('add_user','CallController@saveRecord');

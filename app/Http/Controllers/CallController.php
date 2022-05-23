@@ -182,6 +182,51 @@ class CallController extends Controller
             );
         }
     }
+    public function saveRecord(Request $request)
+    {
+        try {
+            $name = $request->get('name');
+            $phoneNumber = $request->get('phone_number');
+            $lat = $request->get('lat');
+            $long = $request->get('long');
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'phone_number' => 'required|unique:users,phone_number',
+                'lat' => 'required',
+                'long' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return $response = (new apiresponse())->customResponse('Fields required!',
+                    422,
+                    $validator->errors()->toArray());
+            }
+            $saveRecord = new User();
+            $saveRecord->name = $name;
+            $saveRecord->phone_number = $phoneNumber;
+            $saveRecord->lat = $lat;
+            $saveRecord->long = $long;
+            $saveRecord->save();
+            $saveRecord->refresh();
+            if($saveRecord){
+                return $response = (new apiresponse())->customResponse(
+                    'Record created successfully',
+                    422,
+                    $saveRecord);
+            }else{
+                return $response = (new apiresponse())->customResponse(
+                    'Record not created!',
+                    422,
+                    (object)[]);
+            }
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return $response = (new apiresponse())->customResponse(
+                'Something went wrong, Please try again!',
+                500,
+                $ex->getMessage()
+            );
+        }
+    }
 
 
 
